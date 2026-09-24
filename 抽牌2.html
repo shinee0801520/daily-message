@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#f7efed" />
+<title>給今天的你一句話</title>
+<style>
+:root{--bg:#f7efed;--card:#fffaf7;--ink:#594b4c;--muted:#9a8587;--rose:#c99ca1;--line:#eadbd8;--shadow:0 18px 55px rgba(109,77,80,.13)}
+*{box-sizing:border-box} body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:radial-gradient(circle at 20% 5%,#fff9f7 0 16%,transparent 36%),linear-gradient(155deg,#f8efed,#f2e6e5 70%,#efe1df);display:grid;place-items:center;padding:24px}
+.wrap{width:min(92vw,430px);text-align:center}.eyebrow{font-family:Georgia,serif;letter-spacing:.25em;font-size:11px;color:var(--rose);margin-bottom:16px}.panel{background:rgba(255,250,247,.78);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.75);border-radius:30px;padding:42px 28px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}.panel:before,.panel:after{content:"♡";position:absolute;color:#e5cfd0;font-family:Georgia,serif}.panel:before{font-size:60px;top:-16px;right:20px;opacity:.42}.panel:after{font-size:28px;bottom:10px;left:18px;opacity:.45}h1{font-family:Georgia,"Noto Serif TC",serif;font-weight:500;font-size:29px;letter-spacing:.08em;margin:0 0 14px}.sub{font-size:14px;line-height:1.9;color:var(--muted);margin:0 auto 28px}.card{height:300px;perspective:1000px;margin:18px auto 26px}.inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1)}.card.flipped .inner{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;background:linear-gradient(145deg,#fffdfa,#f8eeec);box-shadow:0 12px 28px rgba(101,72,74,.08)}.back{transform:rotateY(180deg);background:#fffdfb}.symbol{font-family:Georgia,serif;font-size:40px;color:var(--rose);margin-bottom:12px}.small{font-family:Georgia,serif;letter-spacing:.2em;font-size:10px;color:var(--rose)}.quote{font-family:Georgia,"Noto Serif TC",serif;font-size:23px;line-height:1.65;letter-spacing:.04em;margin:8px 0 16px}.guide{font-size:13px;line-height:1.85;color:var(--muted);white-space:pre-line}.btn{appearance:none;border:0;border-radius:999px;background:#8f7477;color:white;padding:15px 26px;width:100%;font-size:15px;letter-spacing:.08em;box-shadow:0 9px 24px rgba(116,84,87,.2);cursor:pointer}.btn:active{transform:scale(.985)}.btn.secondary{margin-top:10px;background:transparent;color:#8f7477;border:1px solid #d9c4c3;box-shadow:none}.foot{font-size:11px;color:#ad9899;margin-top:18px;line-height:1.7}.hidden{display:none}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#665456;color:white;padding:10px 16px;border-radius:999px;font-size:12px;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="eyebrow">DAILY MESSAGE</div>
+  <section class="panel">
+    <h1>給今天的你一句話</h1>
+    <p class="sub">有些話<br>剛好會在你需要的時候出現</p>
+    <div class="card" id="card"><div class="inner">
+      <div class="face front"><div class="symbol">♡</div><div class="small">TAP INTO YOUR HEART</div></div>
+      <div class="face back"><div class="small">TODAY'S MESSAGE</div><div class="quote" id="quote"></div><div class="guide" id="guide"></div></div>
+    </div></div>
+    <button class="btn" id="draw">抽一句給自己</button>
+    <button class="btn secondary hidden" id="share">分享我的今日指引</button>
+    <div class="foot" id="foot">每天，都留一句話給自己 ♡</div>
+  </section>
+</main>
+<div class="toast" id="toast">已複製今日指引 ♡</div>
+<script>
+const messages=[
+["別再用他的態度\n決定自己的價值","你值得被好好回應。\n今天先把注意力，放回自己身上。"],
+["有些沉默\n其實已經是答案","不是每一段關係都需要追問到底。\n看懂之後，你也可以選擇往前走。"],
+["你想念的\n也許是曾經被愛的感覺","想念不一定代表適合回頭。\n先問問自己，真正捨不得的是誰。"],
+["真正喜歡你的人\n不會一直讓你猜","關係可以有不確定，\n但不該只剩下你的反覆內耗。"],
+["今天先不要急著\n替他的冷淡找理由","你感受到的失落也很重要。\n別總把自己的感受排在最後。"],
+["放不下沒關係\n但別因此停在原地","心需要時間，生活也要繼續。\n你可以一邊想念，一邊慢慢往前。"],
+["你不是太敏感\n你只是感受到了變化","別急著否定自己的直覺。\n先看行動，再決定要不要相信言語。"],
+["有些人出現\n是為了讓你更懂自己","不一定每次相遇都要有結果。\n有些關係的意義，是讓你長出新的選擇。"],
+["別因為捨不得\n就一直委屈自己","愛一個人和保護自己並不衝突。\n真正適合的關係，不需要你一直縮小自己。"],
+["他有沒有回頭\n不是今天最重要的事","更重要的是，\n你有沒有開始回到自己的生活裡。"],
+["你值得的是確定\n不是忽冷忽熱","心動很珍貴，安心也是。\n別只因為捨不得，就接受反覆的不安。"],
+["別把一次心動\n想成一生的答案","先讓時間替你看清楚。\n真正穩定的感情，經得起慢慢認識。"],
+["如果總是只有你在努力\n那不是雙向奔赴","關係需要兩個人的行動。\n你可以付出，但不用一個人扛起全部。"],
+["今天的你\n不用再證明自己值得被愛","你本來就值得。\n適合的人，不會要求你耗盡自己來換取愛。"],
+["有些答案\n會在你停止追問後出現","先把空間留給時間。\n你不需要今天就把所有事情想明白。"],
+["別怕重新開始\n你已經不是以前的你","這次你更知道自己要什麼。\n新的關係，也可以有新的選擇。"],
+["愛不是一直忍耐\n才叫做深情","能說出自己的需要，\n也是在好好保護一段關係。"],
+["你可以喜歡他\n也可以選擇不再等他","感情不是只有愛不愛。\n你也有權利選擇讓自己舒服的方向。"],
+["今天不要偷看他的動態了","把那幾分鐘留給自己。\n有時候少知道一點，心反而能慢慢安靜下來。"],
+["真正的靠近\n不需要你一直追趕","願意走向你的人，\n也會讓你感覺到他的腳步。"],
+["你不是失去了一個答案\n而是多了一次看清自己的機會","那些不舒服的感受，\n正在告訴你下一次想要怎樣的愛。"],
+["別因為一個人的離開\n懷疑自己的全部","關係的結束不等於你的價值減少。\n你仍然是完整的你。"],
+["有些關係慢一點\n反而比較看得清楚","別急著替曖昧命名。\n先看他是否穩定地靠近你。"],
+["你真正需要的\n不是一句對不起","而是之後真的不再重複傷害。\n道歉很重要，改變更重要。"],
+["今天把期待放低一點\n把自己抱緊一點","不是放棄愛，\n而是不再讓未知牽著你的情緒走。"],
+["如果愛讓你一直害怕失去\n也要記得問自己快不快樂","安全感不是奢侈品。\n你的感受，本來就是關係的一部分。"],
+["他沒有選擇你\n不代表你不值得被選擇","有時候只是彼此的方向不同。\n別把別人的選擇變成對自己的判決。"],
+["今天允許自己\n暫時不堅強","想哭就哭，想安靜就安靜。\n整理情緒不是退步，是在恢復力氣。"],
+["別急著復合\n先看看問題有沒有真的改變","想念可以讓人回頭，\n但只有改變，才能讓關係走得更遠。"],
+["下一段愛\n不需要複製上一段的痛","你已經學會辨認那些讓你不舒服的訊號。\n這一次，可以更相信自己的界線。"],
+["你可以期待愛\n但不用靠愛證明自己","先把生活過成自己喜歡的樣子。\n愛來的時候，是加入，而不是拯救。"],
+["不是每一次心軟\n都要換成回頭","你可以原諒，\n也可以仍然選擇不再回到原本的位置。"],
+["有人讓你心動\n也會有人讓你安心","最好的關係不一定最戲劇化。\n有時候，穩穩的喜歡才最難得。"],
+["別再猜他愛不愛\n看看他怎麼對你","行動不會回答所有問題，\n但通常比想像更接近真相。"],
+["你沒有錯過唯一的人","人生不是只有一個注定的答案。\n你還會遇見新的理解、新的靠近。"],
+["今天先不要做情緒裡的決定","讓心稍微安靜一點。\n重要的選擇，值得等自己清楚之後再做。"],
+["真正的偏愛\n會讓你感受得到","不是靠你反覆確認，\n而是在細節裡讓你知道自己被放在心上。"],
+["你可以想他\n但別忘了想想自己","今天也問問自己：\n我現在真正需要的是什麼？"],
+["有些關係不是沒愛\n只是已經不適合繼續消耗","承認不適合很難。\n但有時候，這也是對彼此的一種溫柔。"],
+["別把他的已讀不回\n變成你的整個晚上","放下手機，去做一件讓自己舒服的小事。\n你的今天，不該只剩等待。"],
+["你正在慢慢放下\n只是自己還沒發現","某一天你會突然發現，\n那個名字已經不再控制你的情緒。"],
+["不是所有遺憾\n都需要重新開始來彌補","有些遺憾最好的位置，\n就是留在過去。"],
+["今天別追著答案跑","真正屬於你的關係，\n不會因為你停一下就消失。"],
+["你要的不是完美的人\n是願意好好溝通的人","衝突不可怕。\n重要的是兩個人有沒有一起處理問題。"],
+["喜歡可以很快\n信任要慢慢來","別急著把全部的自己交出去。\n讓對方用時間證明他的穩定。"],
+["你的界線\n不是拿來讓別人喜歡你的","界線是提醒自己：\n什麼樣的愛，你願意接受。"],
+["今天的你值得被溫柔對待","包括被你自己。\n不要因為一段關係不順，就對自己特別苛刻。"],
+["愛你的人也可能犯錯\n但他會願意面對","真正重要的不是零失誤，\n而是犯錯之後有沒有負責與改變。"],
+["有些人讓你念念不忘\n不代表他最適合你","強烈的情緒和穩定的幸福，\n有時候是兩件不同的事。"],
+["你不用一直表現得不在意","在意就是在意。\n誠實承認自己的感受，比假裝灑脫更自由。"],
+["關係裡最累的\n往往不是吵架，是一直猜","如果可以，試著把問題說清楚。\n你值得一段能夠好好對話的關係。"],
+["他回來了\n也不代表你一定要回去","你可以重新評估，\n現在的他和現在的你，還適不適合。"],
+["別為了留住一個人\n丟掉自己的原則","能留下來的愛，\n不該以失去自己作為代價。"],
+["你會遇到一個人\n讓喜歡不再那麼辛苦","在那之前，先練習不把痛苦當成愛的證明。"],
+["今天適合把話說清楚一點","不是逼對方給答案，\n而是讓自己的需要被好好看見。"],
+["有時候你等的不是他\n是那個沒有發生的結局","承認期待落空會難過。\n但接受它，也會讓你重新有空間往前。"],
+["別把曖昧裡的一點甜\n忽略了所有的不安","喜歡一個人時，也要看整體。\n你值得的是長期舒服，不只是偶爾心動。"],
+["你不需要成為誰的例外\n才能證明自己特別","真正的愛不是競爭。\n你不必贏過任何人，才值得被珍惜。"],
+["今天試著少想一次如果","如果當時怎樣、如果他改變……\n把力氣留給現在真正能做的事。"],
+["你正在學會\n不再為別人的選擇懲罰自己","這會需要時間。\n但每一次把自己放回心上，都是進步。"],
+["關係不是考試\n你不用一直猜正確答案","你可以直接問、直接說、直接感受。\n愛不該只有解題。"],
+["別因為孤單\n回到讓你受傷的地方","孤單會過去。\n但重新進入同樣的循環，可能讓傷口更深。"],
+["今天的答案是：慢一點","慢一點投入、慢一點下結論。\n讓時間替你篩選真正穩定的人。"],
+["如果他真的在乎\n你不需要一個人維持聯絡","主動不是問題。\n問題是永遠只有你一個人在主動。"],
+["你的愛很珍貴\n別拿去反覆證明給不相信的人看","願意理解你的人，\n不會要求你一直耗盡自己。"],
+["你可以期待他的訊息\n但別讓它決定你的心情","把今天過完，把自己的事做好。\n訊息來了再看，也來得及。"],
+["有些離開\n其實是在替新的位置騰出空間","現在看起來像失去，\n未來也可能成為一次重新選擇的開始。"],
+["你需要的不是更會忍\n而是更敢說出不舒服","健康的關係容得下真實。\n你的感受不是麻煩。"],
+["別急著問他是不是對的人","先問：\n跟他在一起時，我喜歡自己現在的樣子嗎？"],
+["愛不該只有捨不得","還要有尊重、安心、信任和願意。\n只靠捨不得，很難走很遠。"],
+["今天把手機放遠一點","有些心情不是等一則訊息就會變好。\n去吃飯、散步、洗澡，好好照顧現在的自己。"],
+["你沒有輸給任何人","感情不是比賽。\n一個人的離開，也不是另一個人的勝利。"],
+["別把過去最甜的片段\n當成現在關係的全部","回憶是真的，現在也是真的。\n做決定時，記得看看眼前發生了什麼。"],
+["真正適合你的愛\n會讓你更像自己","你不用演、不用猜、不用一直討好。\n你可以自在地存在。"],
+["今天適合相信一次自己的感受","如果一件事一直讓你不舒服，\n它就值得被正視，而不是被你說服自己忽略。"],
+["你不是非他不可","你只是現在還很習慣有他。\n習慣可以慢慢改變，心也會慢慢找到新的位置。"],
+["別把『他以前很好』\n當成留下來的唯一理由","關係活在現在。\n你值得看看此刻的自己，究竟過得好不好。"],
+["今天不用逼自己放下","只要比昨天少為他委屈自己一點點，\n就已經是在往前。"],
+["新的感情正在靠近前\n先替自己留一點空間","別急著用舊傷預測新的人。\n每段關係，都值得重新認識。"],
+["喜歡你的人\n也會想知道你的感受","不是只有你研究他的每個訊號。\n雙向的關係，彼此都會好奇。"],
+["你不必靠冷淡\n試探一個人會不會留下","真正的安全感來自溝通，\n不是互相猜測。"],
+["有些事情你已經知道答案了","只是心還沒準備好接受。\n沒關係，給自己一點時間。"],
+["今天請把自己排在前面一次","不是自私。\n只是你也應該成為自己會照顧的人。"],
+["他愛你的方式\n也要是你感受得到的方式","愛不是只看出發點。\n彼此能不能理解對方的需要，同樣重要。"],
+["別害怕失去不適合的關係","空下來的位置，\n才有機會裝進真正舒服的生活。"],
+["你值得被堅定地選擇","不是因為你完美，\n而是因為健康的愛本來就包含尊重與確認。"],
+["今天的你不需要答案\n需要的是休息","有些事情睡一覺再想，\n會比現在反覆分析更清楚。"],
+["不要因為他偶爾的溫柔\n忘記你長期的難過","看一段關係，要看它大部分時間帶給你的感受。"],
+["如果你總在害怕說錯話\n也許你需要更多安全感","好的關係不是完全沒有顧慮，\n但你不該長期小心翼翼。"],
+["愛不是讓你變得更會忍耐","而是讓兩個人都願意調整。\n你不是唯一需要改變的人。"],
+["今天適合期待新的可能","不是一定會遇見誰，\n而是你開始願意相信人生不只一種結局。"],
+["你可以重新喜歡一個人","即使以前受過傷。\n慢慢來，新的心動不用急著證明什麼。"],
+["不要用他的回覆速度\n衡量自己的重要程度","真正的關係要看整體的投入和尊重。\n別讓一個小訊號吞掉整天的心情。"],
+["你不是難搞\n你只是有自己的需要","合適的人未必全部做到，\n但會願意聽懂，而不是嘲笑你的感受。"],
+["今天少替別人想一點\n多替自己想一點","你已經很會理解別人了。\n現在，也把同樣的理解留給自己。"],
+["有些愛要留下\n有些愛要放回回憶裡","兩種都不是失敗。\n重要的是你有沒有越來越靠近想要的生活。"],
+["如果你一直問『他會不會變』","也問問自己：\n如果他沒有變，我願意一直這樣嗎？"],
+["今天的你可以不等了","不是因為不愛，\n而是你終於願意把時間也留給自己。"],
+["你會再次心動的","也會再次被理解、被珍惜。\n現在的難過，不會是你全部的故事。"],
+["真正的愛不是控制","它會有界線，也有自由。\n你們可以靠近，同時仍然保有自己。"],
+["別把自己困在『早知道』裡","當時的你已經用當時知道的一切做了選擇。\n現在，你可以用新的理解重新選。"],
+["今天，先相信自己值得幸福","不是等誰來證明。\n從你願意善待自己的那一刻開始。"]
+];
+const card=document.getElementById('card'), quote=document.getElementById('quote'), guide=document.getElementById('guide'), draw=document.getElementById('draw'), share=document.getElementById('share'), foot=document.getElementById('foot'), toast=document.getElementById('toast');
+const key='daily-message-v1';
+const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei'}).format(new Date());
+function seededIndex(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return Math.abs(h)%messages.length}
+function reveal(i){quote.innerText=messages[i][0];guide.innerText=messages[i][1];card.classList.add('flipped');draw.textContent='今天已經抽過了 ♡';draw.disabled=true;draw.style.opacity=.72;share.classList.remove('hidden');foot.textContent='明天，再回來聽一句新的話 ♡'}
+let saved;try{saved=JSON.parse(localStorage.getItem(key)||'null')}catch(e){}
+if(saved&&saved.date===today()) reveal(saved.index);
+draw.addEventListener('click',()=>{const i=seededIndex(today()+'|'+Math.random().toString(36).slice(2));localStorage.setItem(key,JSON.stringify({date:today(),index:i}));reveal(i)});
+share.addEventListener('click',async()=>{const txt=`給今天的我一句話 ♡\n\n${quote.innerText}\n\n${guide.innerText}`;try{if(navigator.share){await navigator.share({title:'給今天的你一句話',text:txt})}else{await navigator.clipboard.writeText(txt);toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)}}catch(e){}});
+</script>
+</body>
+</html>
